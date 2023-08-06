@@ -122,6 +122,9 @@ public fun Project.applyCommonServerConfiguration(javaApplication: JavaApplicati
     localProperties,
   ) {
     checkJavaVersion()
+    jvmArgs(
+      "-Djava.system.class.loader=com.intellij.util.lang.PathClassLoader",
+    )
     setupHeadlessServer()
   }
 }

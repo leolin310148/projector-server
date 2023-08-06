@@ -61,6 +61,6 @@ public fun getIdePrefix(idePath: String): String? {
 }
 
 private fun getProductInfoFile(idePath: String): File = when {
-  OperatingSystem.current().isMacOsX -> File("$idePath/MacOS/product-info.json")
+  OperatingSystem.current().isMacOsX -> File("$idePath/Resources/product-info.json")
   else -> File("$idePath/product-info.json")
 }

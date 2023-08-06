@@ -40,72 +40,40 @@ public fun Project.createRunIdeaTask(
   if (ideaPath == null) return
 
   val ideaLib = "$ideaPath/lib"
-  var ideaClassPath = "$ideaLib/bootstrap.jar:$ideaLib/extensions.jar:$ideaLib/util.jar:$ideaLib/jdom.jar:$ideaLib/log4j.jar:$ideaLib/trove4j.jar"
-
-  // todo: this is added because of 222 EAP. deal with specific jars with versions!
-  ideaClassPath += """
-    $ideaLib/util.jar
-    $ideaLib/app.jar
-    $ideaLib/3rd-party-rt.jar
-    $ideaLib/jna.jar
-    $ideaLib/platform-statistics-devkit.jar
-    $ideaLib/jps-model.jar
-    $ideaLib/rd-core.jar
-    $ideaLib/rd-framework.jar
-    $ideaLib/stats.jar
-    $ideaLib/protobuf.jar
-    $ideaLib/external-system-rt.jar
-    $ideaLib/jsp-base-openapi.jar
-    $ideaLib/forms_rt.jar
-    $ideaLib/intellij-test-discovery.jar
-    $ideaLib/rd-swing.jar
-    $ideaLib/annotations.jar
-    $ideaLib/groovy.jar
-    $ideaLib/annotations-java5.jar
-    $ideaLib/async-profiler.jar
-    $ideaLib/byte-buddy-agent.jar
-    $ideaLib/error-prone-annotations.jar
-    $ideaLib/externalProcess-rt.jar
-    $ideaLib/grpc-netty-shaded.jar
-    $ideaLib/idea_rt.jar
-    $ideaLib/intellij-coverage-agent-1.0.656.jar
-    $ideaLib/jsch-agent.jar
-    $ideaLib/junit.jar
-    $ideaLib/junit4.jar
-    $ideaLib/junixsocket-core.jar
-    $ideaLib/lz4-java.jar
-    $ideaLib/platform-objectSerializer-annotations.jar
-    $ideaLib/pty4j.jar
-    $ideaLib/rd-text.jar
-    $ideaLib/tests_bootstrap.jar
-    $ideaLib/uast-tests.jar
-    $ideaLib/util_rt.jar
-    $ideaLib/winp.jar
-    $ideaLib/ant/lib/ant.jar
-    $ideaLib/dbus-java-3.2.1.jar
-    $ideaLib/java-utils-1.0.6.jar
-    $ideaLib/jnr-unixsocket-0.23.jar
-    $ideaLib/jnr-ffi-2.1.10.jar
-    $ideaLib/jffi-1.2.19.jar
-    $ideaLib/jffi-1.2.19-native.jar
-    $ideaLib/asm-7.1.jar
-    $ideaLib/asm-commons-7.1.jar
-    $ideaLib/asm-analysis-7.1.jar
-    $ideaLib/asm-tree-7.1.jar
-    $ideaLib/asm-util-7.1.jar
-    $ideaLib/jnr-a64asm-1.0.0.jar
-    $ideaLib/jnr-x86asm-1.0.2.jar
-    $ideaLib/jnr-constants-0.9.12.jar
-    $ideaLib/jnr-enxio-0.21.jar
-    $ideaLib/jnr-posix-3.0.50.jar
-  """.trimIndent().lines().joinToString(":", prefix = ":")
+  val ideaClassPath = listOf(
+    "app.jar",
+    "3rd-party-rt.jar",
+    "util.jar",
+    "util_rt.jar",
+    "util-8.jar",
+    "jps-model.jar",
+    "stats.jar",
+    "protobuf.jar",
+    "external-system-rt.jar",
+    "intellij-test-discovery.jar",
+    "forms_rt.jar",
+    "rd.jar",
+    "externalProcess-rt.jar",
+    "annotations-java5.jar",
+    "annotations.jar",
+    "async-profiler-windows.jar",
+    "async-profiler.jar",
+    "byte-buddy-agent.jar",
+    "error-prone-annotations.jar",
+    "groovy.jar",
+    "idea_rt.jar",
+    "intellij-coverage-agent-1.0.706.jar",
+    "jsch-agent.jar",
+    "junit.jar",
+    "junit4.jar",
+    "ant/lib/ant.jar"
+  ).joinToString(":", prefix = ":") { "$ideaLib/$it" }
 
   val jdkHome = System.getProperty("java.home")
 
   println("JDK home dir: $jdkHome")
 
-  val ideaPathsSelector = "ProjectorIntelliJIdea"
-  val prefix = getIdePrefix(ideaPath)
+  val ideaPathsSelector = "IntelliJIdea2023.1"
 
   val (classToLaunchProperty, launcherClassName) = getLaunchingSetup(isAgent)
 
@@ -123,9 +91,7 @@ public fun Project.createRunIdeaTask(
       jvmArgs("-Djava.system.class.loader=com.intellij.util.lang.PathClassLoader")
     }
 
-    if (prefix != null) {
-      jvmArgs("-Didea.platform.prefix=$prefix") // This is required for IDE to determine proper file locations
-    }
+    jvmArgs("-Didea.platform.prefix=Idea") // This is required for IDE to determine proper file locations
 
     configuration()
   }
